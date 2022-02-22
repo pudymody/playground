@@ -64,6 +64,8 @@ word: Word to spell`);
 			word: params.get("word") || "Holu"
 		};
 
+		options.word = options.word.toUpperCase();
+
 		for(let key of Object.keys(options) ){
 			const input = document.getElementById(key);
 			if( input !== undefined ){
