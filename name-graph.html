@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			margin: 0;
+			background: #333;
+			font-family: sans-serif;
+			color: #eee;
+		}
+		form {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			padding: 0.75rem;
+			gap: 0.75rem;
+			max-width: 450px;
+			margin: 0 auto;
+		}
+		button {
+			grid-column: 1/-1;
+		}
+		svg {
+			display: block;
+			height: 100vh;
+			width: 100%;
+			padding: 1rem;
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body>
+	<main></main>
+	<form action="">
+		<label for="radius">Radius of the circle</label> <input type="number" name="radius" id="radius">
+		<label for="font">Font size</label><input type="number" name="font" id="font">
+		<label for="stroke_width">Stroke width</label><input type="number" name="stroke_width" id="stroke_width">
+		<label for="stroke_color">Stroke color</label><input type="color" name="stroke_color" id="stroke_color">
+		<label for="fill">Fill color</label><input type="color" name="fill" id="fill">
+		<label for="duration">Duration animation</label><input type="number" name="duration" id="duration" step="0.1">
+		<label for="word">Word</label><input type="text" name="word" id="word">
+		<button>Generate!</button>
+	</form>
+	<script>
+		let params = (new URL(document.location)).searchParams;
+		console.log(`Add or change the following query params to alter it:
+radius: Radius of the circle
+font: Font size in svg user units
+stroke_width: Stroke width
+stroke_color: Stroke color
+fill: Fill
+duration: Animation duration
+word: Word to spell`);
+
+		const options = {
+			radius: parseInt(params.get("radius"),10) || 512,
+			font: parseInt(params.get("font"),10) || 36,
+			stroke_width: parseInt(params.get("stroke_width"),10) || 3,
+			stroke_color: params.get("stroke_color") || "#ffffff",
+			fill: params.get("fill") || "#ff0000",
+			duration: parseFloat(params.get("duration")) || 1.5,
+			word: params.get("word") || "Holu"
+		};
+
+		for(let key of Object.keys(options) ){
+			const input = document.getElementById(key);
+			if( input !== undefined ){
+				input.value = options[key];
+			}
+		}
+
+		const START_INDEX = options.word.toUpperCase().charCodeAt(0)-65;
+		const OFFSET = -Math.PI/2 - (2*Math.PI/26 * START_INDEX);
+
+		const letters = Array.from({length:26}).map(function(_,i){
+			const x = options.radius + Math.cos( OFFSET + Math.PI * 2 / 26 * i ) * (options.radius-options.font);
+			const y = options.radius + Math.sin( OFFSET + Math.PI * 2 / 26 * i) * (options.radius-options.font);
+
+			const outer_x = options.radius + Math.cos( OFFSET + Math.PI * 2 / 26 * i ) * (options.radius-options.font-20);
+			const outer_y = options.radius + Math.sin( OFFSET + Math.PI * 2 / 26 * i) * (options.radius-options.font-20);
+			const char = String.fromCharCode(i + 65);
+			const rotation = 360 / 26 * (i-START_INDEX);
+
+			let color = options.stroke_color;
+			if( options.word.indexOf(char) > -1 ){ color = options.fill; }
+
+			return { x, y, outer_x, outer_y, char, rotation, color };
+		});
+
+		const wordIndexes = options.word.toUpperCase().replace(/\s+/g, "").split("").filter(c => c.charCodeAt(0) <= 0x7f).map( c => c.charCodeAt(0) - 65 ).map( i => letters[i] );
+		wordIndexes.push( wordIndexes[0] );
+
+		let pathLength = 0;
+		for(let i = 0; i < wordIndexes.length - 1; i++){
+			pathLength += Math.sqrt(
+				Math.pow( wordIndexes[i].outer_x - wordIndexes[i+1].outer_x, 2) +
+				Math.pow( wordIndexes[i].outer_y - wordIndexes[i+1].outer_y, 2)
+			);
+		}
+		pathLength = Math.ceil(pathLength);
+		const pathCommands = wordIndexes.map( letter => `${letter.outer_x},${letter.outer_y}` );
+
+		document.getElementsByTagName("main")[0].innerHTML = `<svg viewBox="0 0 ${options.radius*2} ${options.radius*2}">
+			${ letters.map(l => `<text x="${l.x}" y="${l.y}" text-anchor="middle" font-size="${options.font}" fill="${l.color}" transform="rotate(${l.rotation},${l.x},${l.y})">${l.char}</text>`).join("") }
+			<path d="M${pathCommands.join("L")}" stroke-width="${options.stroke_width}" stroke="${options.stroke_color}" fill="transparent" stroke-dasharray="${pathLength}">
+				<animate attributeName="stroke-dashoffset" to="0" from="${pathLength}" dur="${options.duration}s" fill="freeze"/>
+				<animate attributeName="fill" to="${options.fill}" from="transparent" dur="${options.duration}s" fill="freeze" begin="${options.duration}s"/>
+			</path>
+		</svg>`;
+	</script>
+</body>
+</html>
