@@ -33,6 +33,7 @@
 </head>
 <body>
 	<main></main>
+	<button class="share">Share</button>
 	<form action="">
 		<label for="radius">Radius of the circle</label> <input type="number" name="radius" id="radius">
 		<label for="font">Font size</label><input type="number" name="font" id="font">
@@ -104,13 +105,61 @@ word: Word to spell`);
 		pathLength = Math.ceil(pathLength);
 		const pathCommands = wordIndexes.map( letter => `${letter.outer_x},${letter.outer_y}` );
 
-		document.getElementsByTagName("main")[0].innerHTML = `<svg viewBox="0 0 ${options.radius*2} ${options.radius*2}">
+		const display_svg = `<svg viewBox="0 0 ${options.radius*2} ${options.radius*2}" xmlns="http://www.w3.org/2000/svg">
 			${ letters.map(l => `<text x="${l.x}" y="${l.y}" text-anchor="middle" font-size="${options.font}" fill="${l.color}" transform="rotate(${l.rotation},${l.x},${l.y})">${l.char}</text>`).join("") }
 			<path d="M${pathCommands.join("L")}" stroke-width="${options.stroke_width}" stroke="${options.stroke_color}" fill="transparent" stroke-dasharray="${pathLength}">
 				<animate attributeName="stroke-dashoffset" to="0" from="${pathLength}" dur="${options.duration}s" fill="freeze"/>
 				<animate attributeName="fill" to="${options.fill}" from="transparent" dur="${options.duration}s" fill="freeze" begin="${options.duration}s"/>
 			</path>
 		</svg>`;
+
+		const share_svg = `<svg viewBox="0 0 ${options.radius*2} ${options.radius*2}" xmlns="http://www.w3.org/2000/svg" width="${options.radius*2}" height="${options.radius*2}">
+			${ letters.map(l => `<text x="${l.x}" y="${l.y}" text-anchor="middle" font-size="${options.font}" fill="${l.color}" transform="rotate(${l.rotation},${l.x},${l.y})">${l.char}</text>`).join("") }
+		 <path d="M${pathCommands.join("L")}" stroke-width="${options.stroke_width}" stroke="${options.stroke_color}" fill="${options.fill}" />
+		</svg>`;
+
+		document.getElementsByTagName("main")[0].innerHTML = display_svg;
+
+		function svg_to_img(svg){
+			return new Promise(function(resolve,reject){
+				const blob = new Blob([share_svg], { type: "image/svg+xml" });
+				const $img = new Image();
+				$img.src = window.URL.createObjectURL(blob);
+				$img.onload = function(){
+					window.URL.revokeObjectURL(this.src);
+
+					const $canvas = document.createElement("canvas");
+					$canvas.width = $canvas.height = options.radius*2;
+
+					const ctx = $canvas.getContext("2d");
+					ctx.drawImage(this, 0, 0);
+
+					$canvas.toBlob(function(blob){
+						resolve(blob);
+					})
+				};
+			});
+		}
+
+		const $share = document.querySelector(".share");
+		if( $share !== undefined ){
+			$share.addEventListener("click", async function share(){
+
+				const file = await svg_to_img(share_svg);
+				const shareData = {
+					files: [file],
+					url: document.location.href,
+				};
+
+				if (navigator.canShare && navigator.canShare(shareData)) {
+					navigator.share(shareData)
+					.then(() => console.log('Share was successful.'))
+					.catch((error) => console.log('Sharing failed', error));
+				} else {
+					console.log(`Your system doesn't support sharing files.`);
+				}
+			});
+		}
 	</script>
 </body>
 </html>
