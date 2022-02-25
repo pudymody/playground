@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>experiment-supergroup-name-generator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html,body {
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			font-size: 2em;
+			text-align: center;
+		}
+
+		div {
+			padding: 10px;
+		}
+	</style>
+	<script>
+			const DATA1 = [
+				"Death",
+				"Love",
+				"The All-Star",
+				"The All-American",
+				"Global",
+				"International",
+				"The Great Lakes",
+				"Teen",
+				"Mystery",
+				"Pain",
+				"Salvation",
+				"Metropolitan",
+				"Cosmic",
+				"The West Coast",
+				"Mutant",
+				"Heroes for",
+				"Royal",
+				"Insanity",
+				"Freedom",
+				"Tyranny",
+				"Secret",
+				"Sanity",
+				"Vengeance",
+				"Thrill Kill",
+				"Squadron",
+				"Honor",
+				"Sovereign",
+				"Great",
+				"Universal",
+				"The East Coast",
+				"Destiny",
+				"The Street",
+				"Alpha",
+				"Fearsome",
+				"Hate",
+				"Espionage",
+				"Damage",
+				"Solar",
+				"Lunar",
+				"Health",
+				"The Hellfire",
+				"Holy",
+				"Power",
+				"The",
+				"Dark",
+				"Protection",
+				"Danger",
+				"Paradox",
+				"Dawn",
+				"Fear",
+				"Night",
+				"Sun",
+				"Moon",
+				"Beta",
+				"Outlaw",
+				"The New",
+				"Peace",
+				"South Side",
+				"Monster",
+				"Galactic",
+				"Crime",
+				"League of",
+				"Nature",
+				"Order",
+				"Chaos",
+				"Alien",
+				"Gamma",
+				"Earth",
+				"Heroes",
+				"Time",
+				"Nazi",
+				"The Zodiac",
+				"Villains",
+				"X-",
+				"Shadow",
+				"Culture",
+				"Infinity",
+				"Pan-Latin",
+				"The Star",
+				"Human",
+				"The Fatal",
+				"The Super",
+				"Omega",
+				"American",
+				"Gaia’s",
+				"Quantum",
+				"The War",
+				"The Samurai",
+				"Neighborhood",
+				"Image",
+				"Justice",
+				"Revenge",
+				"Law",
+				"Fearless",
+				"Royal",
+				"Hip Hop",
+				"Magic",
+				"The Parliament of",
+				"Science",
+				"Doom"
+			];
+			const DATA2 = [
+				"Squadron",
+				"League",
+				"Teens",
+				"Alliance",
+				"Guardians",
+				"Incorporated",
+				"Syndicate",
+				"Tyrants",
+				"Society",
+				"Club",
+				"Guard",
+				"Men",
+				"Warriors",
+				"Enforcers",
+				"League of America",
+				"Sentai",
+				"Flight",
+				"Four",
+				"Patrol",
+				"Soldiers",
+				"Phalanx",
+				"of Supervillains",
+				"Anarchists",
+				"Hyperforce",
+				"People",
+				"Commandos",
+				"Outlaws",
+				"Detective Agency",
+				"Legion",
+				"Rangers",
+				"Unlimited",
+				"Titans",
+				"of Mars",
+				"Fighters",
+				"Coalition",
+				"Pack",
+				"Reign",
+				"Assembly",
+				"Five",
+				"Ten",
+				"Avengers",
+				"Mob",
+				"United",
+				"Brothers",
+				"Elite",
+				"Cyborgs",
+				"Ninja Clan",
+				"Gods",
+				"Champions",
+				"of the Unknown",
+				"Gadgeteers",
+				"Crew",
+				"Force",
+				"Kids",
+				"of Magic",
+				"13",
+				"Brotherhood",
+				"Antarctica",
+				"Brigade",
+				"Crusaders",
+				"Mutant Society",
+				"Extreme",
+				"Justice",
+				"Imperial Guard",
+				"Corps",
+				"Invaders",
+				"Seven",
+				"Family",
+				"Watch",
+				"of Victory",
+				"Girls",
+				"Europe",
+				"Gang",
+				"Friends",
+				"Robots",
+				"of the Galaxy",
+				"Knights",
+				"Ronin",
+				"Protectors",
+				"Foursome",
+				"Cabinet",
+				"Sisterhood",
+				"Works",
+				"Supreme",
+				"Trio",
+				"Defenders",
+				"Lords",
+				"of Atlantis",
+				"Pirates",
+				"Sorcerers",
+				"Mafia",
+				"Angels",
+				"Mutants",
+				"Judges",
+				"Emperors",
+				"of Steel",
+				"Authority",
+				"Primates",
+				"Sentinels",
+				"of Evil"
+			];
+
+			function get(){
+				let primero = Math.floor(Math.random() * DATA1.length);
+				let segundo = Math.floor(Math.random() * DATA2.length);
+
+				return (DATA1[primero] + " " + DATA2[segundo]).toUpperCase();
+			}
+
+		</script>
+</head>
+<body>
+	<div></div>
+	<div>Inspired by: <a href="http://aventurasbizarras.com/wp/generador-de-nombres-para-supergrupos/">http://aventurasbizarras.com/wp/generador-de-nombres-para-supergrupos/</a></div>
+	<script>
+		document.querySelector("div").innerHTML += '<div>'+get()+'</div>';
+	</script>
+</body>
+</html>
