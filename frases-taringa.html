@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Colisionador de hadrones</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		html,body {
+			width: 100%;
+			height: 100%;
+		}
+
+		body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			font-size: 2em;
+			text-align: center;
+		}
+
+		div {
+			padding: 10px;
+		}
+	</style>
+	<script>
+			// type =>
+				// 0 masculino
+				// 1 femenino
+			var First = [
+				{ str : "Turbina", type : 1 },
+				{ str : "Maquina", type : 1 },
+				{ str : "Terremoto", type : 0 },
+				{ str : "Macho", type : 0 },
+				{ str : "Lider", type : 0 },
+				{ str : "Campeon", type : 0 },
+				{ str : "Lince", type : 0 },
+				{ str : "Tigre", type : 0 },
+				{ str : "Camionero", type : 0 },
+				{ str : "Leon", type : 0 },
+				{ str : "Semental", type : 0 },
+				{ str : "Aviador", type : 0 },
+				{ str : "Cientifico", type : 0 },
+				{ str : "Astronauta", type : 0 },
+				{ str : "Rufian", type : 0 },
+				{ str : "Caminante", type : 0 },
+				{ str : "Predador", type : 0 },
+				{ str : "Aniquilador", type : 0 },
+				{ str : "Bestia", type : 1 },
+				{ str : "Señor", type : 0 },
+				{ str : "Maestro", type : 0 },
+				{ str : "Jefe", type : 0 },
+				{ str : "Tsunami", type : 0 },
+				{ str : "Terminator", type : 0 },
+				{ str : "Anaconda", type : 1 },
+				{ str : "Torino", type : 0 },
+				{ str : "Rinoceronte", type : 0 },
+				{ str : "Comandante", type : 0 },
+				{ str : "Maquinaria", type : 1 },
+				{ str : "Director", type : 0 },
+				{ str : "Colisionador", type : 0 },
+				{ str : "Espectro", type : 0 },
+				{ str : "Mutante", type : 0 },
+				{ str : "Androide", type : 0 },
+				{ str : "Maquinola", type : 1 },
+			]
+			var Second = [
+				[{ str : "Albino", type : 0 }, { str : "Albina", type : 0 }],
+				[{ str : "Iberoamericano", type : 0 }, { str : "Iberoamericana", type : 0 }],
+				[{ str : "Nordico", type : 0 }, { str : "Nordica", type : 0 }],
+				[{ str : "Mundial", type : 0 }],
+				[{ str : "Brutal", type : 0 }],
+				[{ str : "Sexual", type : 0 }],
+				[{ str : "Abrupto", type : 0 }, { str : "Abrupta", type : 0 }],
+				[{ str : "Dictador", type : 0 }],
+				[{ str : "Alfa", type : 0 }],
+				[{ str : "Africano", type : 0 }, { str : "Africana", type : 0 }],
+				[{ str : "Volador", type : 0 }, { str : "Voladora", type : 0 }],
+				[{ str : "Atomico", type : 0 }, { str : "Atomica", type : 0 }],
+				[{ str : "Flameante", type : 0 }],
+				[{ str : "Llameante", type : 0 }],
+				[{ str : "Universal", type : 0 }],
+				[{ str : "Violento", type : 0 }, { str : "Violenta", type : 0 }],
+				[{ str : "Hiperespacial", type : 0 }],
+				[{ str : "Mitico", type : 0 }, { str : "Mitica", type : 0 }],
+				[{ str : "Magico", type : 0 }, { str : "Magica", type : 0 }],
+				[{ str : "Misterioso", type : 0 }, { str : "Misteriosa", type : 0 }],
+				[{ str : "Espeluznante", type : 0 }],
+				[{ str : "Prototipico", type : 0 }, { str : "Prototipica", type : 0 }],
+				[{ str : "Galactico", type : 0 }, { str : "Galactica", type : 0 }],
+				[{ str : "Ornamental", type : 0 }],
+				[{ str : "Asesino", type : 0 }, { str : "Asesina", type : 0 }],
+				[{ str : "Culmine", type : 0 }],
+				[{ str : "Abstraido", type : 0 }, { str : "Abstraida", type : 0 }],
+				[{ str : "Fantasmagorico", type : 0 }, { str : "Fantasmagorica", type : 0 }],
+				[{ str : "Alienigena", type : 0 }],
+				[{ str : "Trotamundos", type : 0 }],
+				[{ str : "Gigante", type : 0 }],
+				[{ str : "Maravilloso", type : 0 }],
+				[{ str : "Nacional", type : 0 }],
+				[{ str : "Robotico", type : 0 }, { str : "Robotica", type : 0 }],
+				[{ str : "Celta", type : 0 }],
+			]
+			var Third = [
+				// prefix =>
+					// 0 de
+					// 1 del
+
+				// type =>
+					// 0 masculino
+					// 1 femenino
+					// 2 masculino plural
+					// 3 femenino plural
+				{ str : "Conocimiento", prefix : 1, type : 0 },
+				{ str : "Poder", prefix : 1, type : 0 },
+				{ str : "La genialidad", prefix : 0, type : 0 },
+				{ str : "Las praderas", prefix : 0, type : 3 },
+				{ str : "Umbral", prefix : 1, type : 0 },
+				{ str : "Paralelo", prefix : 1, type : 0 },
+				{ str : "Las galaxias", prefix : 0, type : 3 },
+				{ str : "Las naciones", prefix : 0, type : 3 },
+				{ str : "Los atomos", prefix : 0, type : 2 },
+				{ str : "Los mundos", prefix : 0, type : 2 },
+				{ str : "La vida", prefix : 0, type : 1 },
+				{ str : "Los nanotubos", prefix : 0, type : 2 },
+				{ str : "La teoria del caos", prefix : 0, type : 1 },
+				{ str : "Concepto freudiano", prefix : 1, type : 0 },
+				{ str : "Las sociedades", prefix : 0, type : 3 },
+				{ str : "Las poblaciones", prefix : 0, type : 3 },
+				{ str : "Las paredes", prefix : 0, type : 3 },
+				{ str : "Los ingenieros", prefix : 0, type : 2 },
+				{ str : "Universo", prefix : 1, type : 0 },
+				{ str : "Pos-grado", prefix : 1, type : 0 },
+				{ str : "Las cuevas", prefix : 0, type : 3 },
+				{ str : "Los lagos", prefix : 0, type : 2 },
+				{ str : "La ignicion", prefix : 0, type : 1 },
+				{ str : "La fusion", prefix : 0, type : 1 },
+				{ str : "Los helechos", prefix : 0, type : 2 },
+				{ str : "Los huevos", prefix : 0, type : 2 },
+				{ str : "Sendero", prefix : 1, type : 0 },
+				{ str : "La sustancia", prefix : 0, type : 1 },
+				{ str : "La antimateria", prefix : 0, type : 1 },
+				{ str : "La alquimia", prefix : 0, type : 1 },
+				{ str : "Los gladiadores", prefix : 0, type : 2 },
+				{ str : "Las investiduras", prefix : 0, type : 3 },
+				{ str : "Inconciente", prefix : 1, type : 0 },
+				{ str : "Inframundo", prefix : 1, type : 0 },
+				{ str : "La ecatombe", prefix : 0, type : 1 },
+			]
+			var Fourth = [
+				[{ str : "Integrado"},{ str : "Integrada"},{ str : "Integrados"},{ str : "Integradas"}],
+				[{ str : "Poderoso"},{ str : "Poderosa"},{ str : "Poderosos"},{ str : "Poderosas"}],
+				[{ str : "Magnifico"},{ str : "Magnifica"},{ str : "Magnificos"},{ str : "Magnificas"}],
+				[{ str : "Indiscutible"},{ str : ""},{ str : "Indiscutibles"},{ str : ""}],
+				[{ str : "Subatomico"},{ str : "Subatomica"},{ str : "Subatomicos"},{ str : "Subatomicas"}],
+				[{ str : "Extraterrestre"},{ str : ""},{ str : "Extraterrestres"},{ str : ""}],
+				[{ str : "Darwiniano"},{ str : "Darwiniana"},{ str : "Darwinianos"},{ str : "Darwinianas"}],
+				[{ str : "Paralelo"},{ str : "Paralela"},{ str : "Paralelos"},{ str : "Paralelas"}],
+				[{ str : "Lunatico"},{ str : "Lunatica"},{ str : "Lunaticos"},{ str : "Lunaticas"}],
+				[{ str : "Antimaterial"},{ str : ""},{ str : "Antimateriales"},{ str : ""}],
+				[{ str : "Colectivo"},{ str : "Colectiva"},{ str : "Colectivos"},{ str : "Colectivas"}],
+				[{ str : "Del O-game"},{ str : ""},{ str : ""},{ str : ""}],
+				[{ str : "Existencial"},{ str : ""},{ str : "Existenciales"},{ str : ""}],
+				[{ str : "Extrapolado"},{ str : "Extrapolada"},{ str : "Extrapolados"},{ str : "Extrapoladas"}],
+				[{ str : "Aumentado"},{ str : "Aumentada"},{ str : "Aumentados"},{ str : "Aumentadas"}],
+				[{ str : "Infinito"},{ str : "Infinita"},{ str : "Infinitos"},{ str : "Infinitas"}],
+				[{ str : "Rugiente"},{ str : ""},{ str : "Rugientes"},{ str : ""}],
+				[{ str : "Notatorial"},{ str : ""},{ str : "Notatoriales"},{ str : ""}],
+				[{ str : "Antagonico"},{ str : "Antagonica"},{ str : "Antagonicos"},{ str : "Antagonicas"}],
+				[{ str : "Sofisticado"},{ str : "Sofisticada"},{ str : "Sofisticados"},{ str : "Sofisticadas"}],
+				[{ str : "Flotante"},{ str : ""},{ str : "Flotantes"},{ str : ""}],
+				[{ str : "Grandioso"},{ str : "Grandiosa"},{ str : "Grandiosos"},{ str : "Grandiosas"}],
+				[{ str : "Universitario"},{ str : "Universitaria"},{ str : "Universitarios"},{ str : "Universitarias"}],
+				[{ str : "Submarino"},{ str : "Submarina"},{ str : "Submarinos"},{ str : "Submarinas"}],
+				[{ str : "Terrenal"},{ str : ""},{ str : "Terrenales"},{ str : ""}],
+				[{ str : "Nanobotico"},{ str : "Nanobotica"},{ str : "Nanoboticos"},{ str : "Nanoboticas"}],
+				[{ str : "Extinto"},{ str : "Extinta"},{ str : "Extintos"},{ str : "Extintas"}],
+				[{ str : "Pitonico"},{ str : "Pitonica"},{ str : "Pitonicos"},{ str : "Pitonicas"}],
+				[{ str : "Funcional"},{ str : ""},{ str : "Funcionales"},{ str : ""}],
+				[{ str : "Exponencial"},{ str : ""},{ str : "Exponenciales"},{ str : ""}],
+				[{ str : "Omnipresente"},{ str : ""},{ str : "Omnipresentes"},{ str : ""}],
+				[{ str : "Inmaculado"},{ str : "Inmaculada"},{ str : "Inmaculados"},{ str : "Inmaculadas"}],
+				[{ str : "Galardonado"},{ str : "Galardonada"},{ str : "Galardonados"},{ str : "Galardonadas"}],
+				[{ str : "Estelar"},{ str : ""},{ str : "Estelares"},{ str : ""}],
+				[{ str : "Monumental"},{ str : ""},{ str : "Monumentales"},{ str : ""}],
+			]
+
+			function get(){
+				let string = '';
+				let primero = Math.floor(Math.random() * First.length);
+				let segundo = Math.floor(Math.random() * Second.length);
+				let tercero = Math.floor(Math.random() * Third.length);
+				let cuarto = Math.floor(Math.random() * Fourth.length);
+
+				string += First[ primero ].str;
+				if( First[ primero ].type < Second[segundo].length ){
+					string += " " + Second[segundo][ First[primero].type ].str;
+				}else{
+					string += " " + Second[segundo][0].str;
+				}
+
+				if( Third[tercero].prefix == 0 ){
+					string += " de ";
+				}else{
+					string += " del ";
+				}
+				string += Third[tercero].str;
+				string += " " + Fourth[cuarto][ Third[tercero].type ].str;
+
+				return string.toUpperCase();
+			}
+
+		</script>
+</head>
+<body>
+	<script>
+		document.body.innerHTML += '<div>'+get()+'</div>';
+	</script>
+</body>
+</html>
