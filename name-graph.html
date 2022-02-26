@@ -30,25 +30,49 @@
 			box-sizing: border-box;
 		}
 
-		.share {
-			display: block;
+		button, .download {
 			box-sizing: border-box;
 			border: none;
 			padding: 0.5rem;
 			background: #74c0fc;
 			border-radius: 5px;
 			color: #fff;
-			font-weight: bold;
 			font-size: 1.25rem;
-			margin: 0 auto;
-			width: 50%;
-			margin-bottom: 1rem;
+			margin: 0;
+			text-align: center;
+			text-decoration: none;
+			width: 100%;
+			margin-bottom: 0.75rem;
+			align-items: center;
+		}
+
+		.share:not([hidden]), .download:not([hidden]){
+			display: flex;
+		}
+
+		.share svg, .download svg {
+			display: block;
+			width: 1.5rem;
+			height: 1.5rem;
+			padding: 0;
+			margin-right: 0.5rem;
+		}
+
+		.actions {
+			padding: 0 0.75rem;
 		}
 	</style>
 </head>
 <body>
 	<main></main>
-	<button class="share">Share</button>
+	<div class="actions">
+		<button class="share" hidden><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+  <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+</svg>Share</button>
+		<a class="download" hidden download="image.png"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+  <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+</svg>Download</a>
+	</div>
 	<form action="">
 		<label for="radius">Radius of the circle</label> <input type="number" name="radius" id="radius">
 		<label for="font">Font size</label><input type="number" name="font" id="font">
@@ -159,25 +183,28 @@ word: Word to spell`);
 			});
 		}
 
-		const $share = document.querySelector(".share");
-		if( $share !== undefined ){
-			$share.addEventListener("click", async function share(){
+		svg_to_img(share_svg).then(function(file){
+			const shareData = {
+				files: [ new File([file], "imagen.png", {type:"image/png"}) ],
+				url: document.location.href,
+			};
+			const $share = document.querySelector(".share");
+			const $download = document.querySelector(".download");
 
-				const file = await svg_to_img(share_svg);
-				const shareData = {
-					files: [ new File([file], "imagen.png", {type:"image/png"}) ],
-					url: document.location.href,
-				};
+			if( $download !== undefined ){
+				$download.href = window.URL.createObjectURL(file);
+				$download.removeAttribute("hidden");
+			}
 
-				if (navigator.canShare && navigator.canShare(shareData)) {
-					navigator.share(shareData)
-					.then(() => console.log('Share was successful.'))
-					.catch((error) => console.log('Sharing failed', error));
-				} else {
-					console.log(`Your system doesn't support sharing files.`);
-				}
-			});
-		}
+			if( $share !== undefined && navigator.canShare && navigator.canShare(shareData) ){
+				$share.addEventListener("click", function share(){
+						navigator.share(shareData)
+							.then(() => console.log('Share was successful.'))
+							.catch((error) => console.log('Sharing failed', error));
+				});
+				$share.removeAttribute("hidden");
+			}
+		});
 	</script>
 </body>
 </html>
