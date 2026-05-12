@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+	<style>
+		body {
+			margin: 0;
+			min-height: 100vh;
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
+			font-family: sans-serif;
+			font-size: 3rem;
+			flex-wrap: wrap;
+			align-content: center;
+		}
+
+		input {
+			font-family: inherit;
+			font-size: inherit;
+		}
+
+		.total {
+			color: green;
+		}
+	</style>
+</head>
+<body x-data="app">
+		$ <input type="number" x-model="amount"> pesos el dia <input type="date" x-model="date"> son $<span class="total" x-text="(amount / values.get(`${date}_${currentType}`)).toFixed()"></span> dolares <select x-model="currentType"><template x-for="type in types"><option x-text="type"></option></template></select>
+		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+		<script>
+			function today(){
+				const now = new Date();
+				let year = now.getFullYear();
+				let month = String(now.getMonth() + 1).padStart(2,"0"); // getMonth() is zero-based
+				let day = String(now.getDate()).padStart(2,"0");
+
+				return `${year}-${month}-${day}`;
+			};
+			document.addEventListener('alpine:init', () => {
+				Alpine.data('app', () => ({
+					amount: 0,
+					date: today(),
+					currentType: "oficial",
+					types: new Set(),
+					values: new Map(),
+
+					init(){
+						fetch('https://api.argentinadatos.com/v1/cotizaciones/dolares')
+							.then( res => res.json() )
+							.then((data) => {
+								for(let h of data){
+									this.types.add(h.casa);
+									this.values.set(`${h.fecha}_${h.casa}`, h.venta);
+								}
+
+								this.currentType = "oficial";
+								this.amount = this.values.get(`${this.date}_${this.currentType}`);
+							});
+					}
+				}))
+			})
+		</script>
+</body>
+</html>
