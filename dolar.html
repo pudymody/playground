@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 	<style>
+		* {
+			box-sizing: border-box;
+		}
 		body {
 			margin: 0;
 			min-height: 100vh;
@@ -15,11 +18,13 @@
 			font-size: 3rem;
 			flex-wrap: wrap;
 			align-content: center;
+			padding: 1rem;
 		}
 
 		input, select {
 			font-family: inherit;
 			font-size: inherit;
+			max-width: 100%;
 		}
 
 		.total {
