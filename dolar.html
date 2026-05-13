@@ -10,7 +10,7 @@
 		}
 		body {
 			margin: 0;
-			min-height: 100vh;
+			min-height: 100svh;
 			display: flex;
 			justify-content: center;
 			gap: 1rem;
@@ -38,6 +38,7 @@
 		<script>
 			function today(){
 				const now = new Date();
+				now.setDate(0);
 				let year = now.getFullYear();
 				let month = String(now.getMonth() + 1).padStart(2,"0"); // getMonth() is zero-based
 				let day = String(now.getDate()).padStart(2,"0");
